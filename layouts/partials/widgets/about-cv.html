@@ -1,0 +1,310 @@
+<div class="flex flex-col lg:flex-row gap-8 about-cv-container">
+  <!-- Left Sidebar -->
+  <div class="lg:w-1/4 flex-none about-cv-sidebar">
+    <div class="sticky top-20 text-center sidebar-inner">
+      <!-- Avatar -->
+      {{ $img := partial "utils/get-image" (dict "context" . "url" .Params.avatar "keyword" "*avatar*") }}
+      {{ with $img }}
+        <div class="mb-6 avatar-container">
+          <img src="{{ . }}" class="rounded-full w-full avatar-image" alt="Avatar" />
+        </div>
+      {{ end }}
+
+      <!-- Name -->
+      <h1 class="text-2xl font-bold mb-2">{{ .Title }}</h1>
+
+      <!-- Role and Organization -->
+      {{ if or .Params.role .Params.organization }}
+      <div class="mb-4 text-sm">
+        {{ with .Params.role }}
+        <div>{{ . }}</div>
+        {{ end }}
+        {{ with .Params.organization }}
+        <div>{{ .name }}</div>
+        {{ end }}
+      </div>
+      {{ end }}
+
+      <!-- Social Links (icons only) -->
+      <div class="mb-6 flex flex-row justify-center gap-4">
+        {{ $brand := $.Param "social" }}
+        {{ range $brand }}
+          {{ $iconPack := .iconPack | default .icon_pack }}
+          {{ $src := print $iconPack " fa-" .icon }}
+          <a href="{{ .url }}" class="text-link hover:text-link-hover text-xl opacity-70 hover:opacity-100 transition-opacity" target="_blank" rel="noopener" title="{{ .name | default .icon }}">
+            <i class="{{ print $src }}"></i>
+          </a>
+        {{ end }}
+      </div>
+
+      <!-- Resume Link -->
+      {{ with .Params.resume }}
+      <div class="mb-6">
+        <a href="{{ .url }}" class="resume-button inline-flex items-center justify-center gap-2 px-4 py-2 rounded transition-all duration-200" target="_blank" rel="noopener">
+          <i class="fas fa-file-download"></i>
+          <span>{{ .text | default "Download Resume" }}</span>
+        </a>
+      </div>
+      {{ end }}
+
+      <!-- Table of Contents / Navigation Links -->
+      <div class="mb-6 text-left sidebar-nav">
+        <nav class="sidebar-toc">
+          <ul class="list-none p-0 m-0 space-y-2">
+            <!-- Will be populated by JavaScript -->
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Content -->
+  <div class="lg:w-3/4 grow about-cv-content">
+    <div class="prose max-w-none" id="about-content">
+      {{ .Content }}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Generate table of contents from h2 headings
+  document.addEventListener('DOMContentLoaded', function() {
+    const contentDiv = document.getElementById('about-content');
+    const tocContainer = document.querySelector('.sidebar-toc ul');
+    
+    if (contentDiv && tocContainer) {
+      const headings = contentDiv.querySelectorAll('h2');
+      headings.forEach((heading, index) => {
+        // Create ID if doesn't exist
+        if (!heading.id) {
+          heading.id = 'section-' + index;
+        }
+        
+        // Create link
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + heading.id;
+        a.textContent = heading.textContent.trim();
+        a.className = 'sidebar-nav-link text-sm';
+        a.style.display = 'block';
+        a.style.padding = '0.25rem 0';
+        
+        // Smooth scroll with offset to account for fixed header
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.getElementById(heading.id);
+          if (target) {
+            const headerHeight = 80; // Approximate header height (5rem = 80px)
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = targetPosition - headerHeight - 20; // Extra 20px spacing
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+        
+        li.appendChild(a);
+        tocContainer.appendChild(li);
+      });
+      
+      // Highlight active section on scroll
+      const observerOptions = {
+        rootMargin: '-10% 0px -80% 0px', // Adjusted to better detect sections near top
+        threshold: 0
+      };
+      
+      // Track which sections are currently visible
+      const visibleSections = new Map();
+      
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target.id, entry.target);
+          } else {
+            visibleSections.delete(entry.target.id);
+          }
+        });
+        
+        // Determine which section should be active
+        // Priority: first visible section, or first section if none visible
+        let activeId = null;
+        if (visibleSections.size > 0) {
+          // Find the first visible section (closest to top)
+          const sortedHeadings = Array.from(headings).sort((a, b) => {
+            const aRect = a.getBoundingClientRect();
+            const bRect = b.getBoundingClientRect();
+            return aRect.top - bRect.top;
+          });
+          
+          for (const heading of sortedHeadings) {
+            if (visibleSections.has(heading.id) && heading.getBoundingClientRect().top >= 0) {
+              activeId = heading.id;
+              break;
+            }
+          }
+          
+          // If no section found above viewport, use first visible one
+          if (!activeId && visibleSections.size > 0) {
+            activeId = Array.from(visibleSections.keys())[0];
+          }
+        } else {
+          // If no sections are visible and we're near the top, highlight first section
+          if (window.scrollY < 200) {
+            activeId = headings[0]?.id || null;
+          }
+        }
+        
+        // Update active class
+        tocContainer.querySelectorAll('a').forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        if (activeId) {
+          const activeLink = tocContainer.querySelector(`a[href="#${activeId}"]`);
+          if (activeLink) {
+            activeLink.classList.add('active');
+          }
+        }
+      }, observerOptions);
+      
+      headings.forEach(heading => observer.observe(heading));
+      
+      // Set initial active state to first heading if page is at top
+      if (window.scrollY < 100 && headings.length > 0) {
+        const firstLink = tocContainer.querySelector(`a[href="#${headings[0].id}"]`);
+        if (firstLink) {
+          firstLink.classList.add('active');
+        }
+      }
+    }
+  });
+
+  // Process Work Experience section to convert to cards
+  document.addEventListener('DOMContentLoaded', function() {
+    const contentDiv = document.getElementById('about-content');
+    if (!contentDiv) return;
+    
+    const workExpHeading = Array.from(contentDiv.querySelectorAll('h2')).find(h2 => 
+      h2.textContent.trim() === 'Work Experience'
+    );
+    
+    if (!workExpHeading) return;
+    
+    // Find all work experience entries (h3 elements or paragraphs starting with bold)
+    const workExpEntries = [];
+    let currentElement = workExpHeading.nextElementSibling;
+    
+    while (currentElement && currentElement.tagName !== 'H2') {
+      // Check if it's an h3 or a paragraph starting with strong tag (bold text)
+      const isTitle = currentElement.tagName === 'H3' || 
+                     (currentElement.tagName === 'P' && currentElement.querySelector('strong') && 
+                      currentElement.querySelector('strong') === currentElement.firstElementChild);
+      
+      if (isTitle) {
+        const entry = {
+          title: currentElement,
+          meta: null,
+          content: []
+        };
+        
+        // Get next element (should be p with company/date)
+        let nextEl = currentElement.nextElementSibling;
+        if (nextEl && nextEl.tagName === 'P') {
+          entry.meta = nextEl;
+          nextEl = nextEl.nextElementSibling;
+        }
+        
+        // Collect content until next title (h3 or p with strong) or h2
+        while (nextEl && nextEl.tagName !== 'H2') {
+          const isNextTitle = nextEl.tagName === 'H3' || 
+                             (nextEl.tagName === 'P' && nextEl.querySelector('strong') && 
+                              nextEl.querySelector('strong') === nextEl.firstElementChild);
+          if (isNextTitle) break;
+          
+          entry.content.push(nextEl);
+          nextEl = nextEl.nextElementSibling;
+        }
+        
+        workExpEntries.push(entry);
+        currentElement = nextEl;
+      } else {
+        currentElement = currentElement.nextElementSibling;
+      }
+    }
+    
+    if (workExpEntries.length === 0) return;
+    
+    // Create cards container
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'work-experience-cards';
+    cardsContainer.style.marginTop = '1.5rem';
+    
+    // Create cards for each work experience
+    workExpEntries.forEach(entry => {
+      const card = document.createElement('div');
+      card.className = 'mb-6';
+      
+      const cardInner = document.createElement('div');
+      cardInner.className = 'bg-secondary-bg dark:border-tertiary-bg rounded border p-6 transition duration-200 ease-in-out hover:shadow-lg';
+      
+      // Title (h3 or p with strong)
+      let title;
+      if (entry.title.tagName === 'H3') {
+        title = entry.title.cloneNode(true);
+        title.className = 'mt-0 mb-4';
+        title.style.marginTop = '0';
+      } else {
+        // Convert p with strong to h3-like element
+        title = document.createElement('h3');
+        title.className = 'mt-0 mb-4';
+        title.style.marginTop = '0';
+        title.style.fontSize = '1.25rem';
+        title.style.fontWeight = '600';
+        const strong = entry.title.querySelector('strong');
+        if (strong) {
+          title.textContent = strong.textContent;
+        } else {
+          title.textContent = entry.title.textContent;
+        }
+      }
+      cardInner.appendChild(title);
+      
+      // Meta info (company, date, location)
+      if (entry.meta) {
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'flex flex-col md:flex-row md:justify-between mb-4';
+        
+        const metaContent = entry.meta.cloneNode(true);
+        metaContent.className = '';
+        metaDiv.appendChild(metaContent);
+        
+        cardInner.appendChild(metaDiv);
+      }
+      
+      // Content (list items, etc.)
+      if (entry.content.length > 0) {
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'mt-5';
+        entry.content.forEach(el => {
+          contentDiv.appendChild(el.cloneNode(true));
+        });
+        cardInner.appendChild(contentDiv);
+      }
+      
+      card.appendChild(cardInner);
+      cardsContainer.appendChild(card);
+    });
+    
+    // Insert cards container after Work Experience heading
+    workExpHeading.parentNode.insertBefore(cardsContainer, workExpHeading.nextSibling);
+    
+    // Remove original work experience elements
+    workExpEntries.forEach(entry => {
+      entry.title.remove();
+      if (entry.meta) entry.meta.remove();
+      entry.content.forEach(el => el.remove());
+    });
+  });
+</script>

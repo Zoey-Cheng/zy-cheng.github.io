@@ -1,0 +1,285 @@
+/* Custom link styles - Matching Lapis theme blue (#4870ac) */
+/* Base color: #4870ac (Lapis theme primary color) */
+/* Exclude header/navigation links */
+
+/* Increase header navigation padding - 2x original */
+header nav {
+  padding-left: 3rem !important; /* 2x px-6 (1.5rem) */
+  padding-right: 3rem !important;
+}
+
+@media (min-width: 768px) {
+  header nav {
+    padding-left: 4rem !important; /* 2x md:px-8 (2rem) */
+    padding-right: 4rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  header nav {
+    padding-left: 6rem !important; /* 2x lg:px-12 (3rem) */
+    padding-right: 6rem !important;
+  }
+}
+
+/* Navigation menu links - About link color #4370af */
+header nav a[href="#about"],
+header nav a[href*="#about"] {
+  color: #4370af !important;
+  text-decoration: none !important;
+}
+
+header nav a[href="#about"]:hover,
+header nav a[href*="#about"]:hover {
+  color: #4370af !important;
+  text-decoration: none !important;
+}
+
+/* Selected About menu item */
+header nav a.selected-menu-item[href="#about"],
+header nav a.selected-menu-item[href*="#about"] {
+  color: #4370af !important;
+  border-top-color: #4370af !important;
+}
+
+/* Other header links - keep original styling */
+header a:not([href="#about"]):not([href*="#about"]),
+header nav a:not([href="#about"]):not([href*="#about"]),
+header a.text-primary-text:not([href="#about"]):not([href*="#about"]) {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+header a:not([href="#about"]):not([href*="#about"]):hover,
+header nav a:not([href="#about"]):not([href*="#about"]):hover,
+header a.text-primary-text:not([href="#about"]):not([href*="#about"]):hover {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* Left sidebar social icons - dark gray */
+.about-cv-sidebar .flex.flex-row.justify-center.gap-4 a[target="_blank"][rel="noopener"][title] {
+  color: #555 !important; /* Dark gray for social icons */
+  text-decoration: none !important;
+}
+
+.about-cv-sidebar .flex.flex-row.justify-center.gap-4 a[target="_blank"][rel="noopener"][title]:hover {
+  color: #555 !important;
+  text-decoration: none !important;
+}
+
+/* Left sidebar Resume button - #4370af button style */
+.about-cv-sidebar .resume-button {
+  background-color: #4370af !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  border: none !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 4px rgba(67, 112, 175, 0.2) !important;
+}
+
+.about-cv-sidebar .resume-button:hover {
+  background-color: #365a95 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 8px rgba(67, 112, 175, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.about-cv-sidebar .resume-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(67, 112, 175, 0.2) !important;
+}
+
+.about-cv-sidebar .resume-button:visited {
+  color: #ffffff !important;
+}
+
+/* Other sidebar links - #4370af (but exclude navigation links) */
+.about-cv-sidebar a:not([target="_blank"]):not(.sidebar-nav-link),
+.about-cv-sidebar .text-link:not([target="_blank"]):not(.sidebar-nav-link) {
+  color: #4370af !important;
+  text-decoration: none !important;
+  transition: text-decoration 0.2s ease-in-out;
+}
+
+.about-cv-sidebar a:not([target="_blank"]):not(.sidebar-nav-link):hover,
+.about-cv-sidebar .text-link:not([target="_blank"]):not(.sidebar-nav-link):hover {
+  color: #4370af !important;
+  text-decoration: underline !important;
+}
+
+/* Right content area links - Original Lapis blue (#4870ac) */
+.about-cv-content a,
+.about-cv-content .prose a,
+#about-content a {
+  color: #4870ac !important; /* Lapis theme primary color for content */
+  text-decoration: none !important;
+  transition: text-decoration 0.2s ease-in-out;
+}
+
+.about-cv-content a:hover,
+.about-cv-content .prose a:hover,
+#about-content a:hover {
+  color: #4870ac !important;
+  text-decoration: underline !important;
+}
+
+.about-cv-content a:visited,
+.about-cv-content .prose a:visited,
+#about-content a:visited {
+  color: #4870ac !important;
+}
+
+/* General prose links (fallback for other pages) */
+.prose a:not(header a):not(nav a) {
+  color: #4870ac !important;
+  text-decoration: none !important;
+}
+
+.prose a:not(header a):not(nav a):hover {
+  color: #4870ac !important;
+  text-decoration: underline !important;
+}
+
+/* Reduce padding for about-cv widget to minimize left/right margins */
+/* Target the widget container div that has the padding classes */
+.max-w-screen-xl > div[id*="about"],
+.max-w-screen-xl > div#about {
+  padding-left: 0.5rem !important; /* px-2 instead of px-4 */
+  padding-right: 0.5rem !important; /* px-2 instead of px-4 */
+}
+
+@media (min-width: 768px) {
+  .max-w-screen-xl > div[id*="about"],
+  .max-w-screen-xl > div#about {
+    padding-left: 0.75rem !important; /* md:px-3 instead of md:px-6 */
+    padding-right: 0.75rem !important; /* md:px-3 instead of md:px-6 */
+  }
+}
+
+@media (min-width: 1280px) {
+  .max-w-screen-xl > div[id*="about"],
+  .max-w-screen-xl > div#about {
+    padding-left: 1rem !important; /* xl:px-4 instead of xl:px-8 */
+    padding-right: 1rem !important; /* xl:px-4 instead of xl:px-8 */
+  }
+}
+
+/* Left sidebar positioning - move right to align with increased header padding */
+.about-cv-container {
+  margin-left: -12.5%; /* Move left by approximately half of lg:w-1/4 (25%) = 12.5% */
+  margin-right: 0; /* Reset right margin */
+}
+
+@media (min-width: 768px) {
+  .about-cv-container {
+    margin-left: calc(-12.5% + 1.5rem); /* Move right by 1.5rem (2x original padding increase) */
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-cv-container {
+    margin-left: calc(-12.5% + 2rem); /* Move right by 2rem on larger screens */
+  }
+}
+
+@media (min-width: 1280px) {
+  .about-cv-container {
+    margin-left: calc(-12.5% + 3rem); /* Move right by 3rem on xl screens */
+  }
+}
+
+/* Sidebar styling - center aligned content, fixed position */
+.about-cv-sidebar {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  position: relative; /* Ensure positioning context */
+}
+
+.about-cv-sidebar .sidebar-inner {
+  position: sticky !important;
+  top: 5rem !important; /* 20 * 0.25rem = 5rem (top-20) */
+  max-height: calc(100vh - 5rem); /* Limit height to viewport minus header */
+  overflow-y: auto; /* Allow scrolling if content is too long */
+  padding-right: 0.5rem; /* Add some padding for scrollbar */
+  z-index: 10; /* Ensure it stays above content */
+}
+
+/* Center align sidebar content */
+.about-cv-sidebar .sidebar-inner {
+  text-align: center;
+}
+
+.about-cv-sidebar h1 {
+  text-align: center !important;
+}
+
+/* Avatar image - smaller size and center aligned */
+.about-cv-sidebar .avatar-container {
+  text-align: center !important;
+}
+
+.about-cv-sidebar .avatar-image {
+  max-width: 16rem !important; /* Smaller than max-w-xs (20rem) - about 80% size */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (min-width: 1024px) {
+  .about-cv-sidebar .avatar-image {
+    max-width: 14rem !important; /* Even smaller on larger screens */
+  }
+}
+
+/* Sidebar navigation (table of contents) */
+.about-cv-sidebar .sidebar-nav {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .about-cv-sidebar .sidebar-nav {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Default state - normal text color (override any other link styles) */
+.about-cv-sidebar .sidebar-nav-link,
+.about-cv-sidebar .sidebar-nav a,
+.about-cv-sidebar .sidebar-toc a {
+  color: var(--color-primary-text, #333) !important; /* Use primary text color */
+  text-decoration: none !important;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+  display: block;
+}
+
+.dark .about-cv-sidebar .sidebar-nav-link,
+.dark .about-cv-sidebar .sidebar-nav a,
+.dark .about-cv-sidebar .sidebar-toc a {
+  color: var(--color-primary-text, #e5e5e5) !important; /* Use primary text color in dark mode */
+}
+
+/* Active state - blue color */
+.about-cv-sidebar .sidebar-nav-link.active {
+  color: #4370af !important;
+  text-decoration: none !important;
+}
+
+/* Hover state - blue color + underline */
+.about-cv-sidebar .sidebar-nav-link:hover {
+  color: #4370af !important;
+  text-decoration: underline !important;
+}
+
+/* Active + hover state - keep blue, add underline */
+.about-cv-sidebar .sidebar-nav-link.active:hover {
+  color: #4370af !important;
+  text-decoration: underline !important;
+}
+
+@media (min-width: 1024px) {
+  .about-cv-sidebar .avatar-image {
+    max-width: 14rem !important; /* Even smaller on larger screens */
+  }
+}
+

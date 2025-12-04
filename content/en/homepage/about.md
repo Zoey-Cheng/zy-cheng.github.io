@@ -25,9 +25,7 @@ resume:
 weight: 1
 widget:
   handler: about-cv
-  sidebar:
-    position: left
-    scale: md
+  width: ""
   background:
     color: secondary
 ---
