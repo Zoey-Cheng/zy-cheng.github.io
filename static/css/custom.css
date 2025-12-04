@@ -200,10 +200,12 @@ header a.text-primary-text:not([href="#about"]):not([href*="#about"]):hover {
 .about-cv-sidebar .sidebar-inner {
   position: sticky !important;
   top: 5rem !important; /* 20 * 0.25rem = 5rem (top-20) */
-  max-height: calc(100vh - 5rem); /* Limit height to viewport minus header */
-  overflow-y: auto; /* Allow scrolling if content is too long */
-  padding-right: 0.5rem; /* Add some padding for scrollbar */
+  align-self: flex-start; /* Align to top of flex container */
+  /* Sticky will naturally stop at container bottom */
+  overflow-y: visible !important;
   z-index: 10; /* Ensure it stays above content */
+  /* Add bottom constraint so it stops when container ends */
+  bottom: auto;
 }
 
 /* Center align sidebar content */
@@ -221,26 +223,45 @@ header a.text-primary-text:not([href="#about"]):not([href*="#about"]):hover {
 }
 
 .about-cv-sidebar .avatar-image {
-  max-width: 16rem !important; /* Smaller than max-w-xs (20rem) - about 80% size */
+  max-width: 10rem !important; /* Smaller size for mobile */
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
 @media (min-width: 1024px) {
   .about-cv-sidebar .avatar-image {
-    max-width: 14rem !important; /* Even smaller on larger screens */
+    max-width: 12rem !important; /* Larger for desktop two-column layout */
   }
 }
 
-/* Sidebar navigation (table of contents) */
+/* Sidebar navigation (table of contents) - centered */
 .about-cv-sidebar .sidebar-nav {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center !important;
 }
 
 .dark .about-cv-sidebar .sidebar-nav {
   border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.about-cv-sidebar .sidebar-toc ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center all list items */
+  text-align: center !important;
+}
+
+.about-cv-sidebar .sidebar-toc ul li {
+  width: 100%;
+  text-align: center;
+}
+
+.about-cv-sidebar .sidebar-toc ul li a {
+  text-align: center !important;
+  display: block;
+  width: 100%;
 }
 
 /* Default state - normal text color (override any other link styles) */
@@ -277,9 +298,4 @@ header a.text-primary-text:not([href="#about"]):not([href*="#about"]):hover {
   text-decoration: underline !important;
 }
 
-@media (min-width: 1024px) {
-  .about-cv-sidebar .avatar-image {
-    max-width: 14rem !important; /* Even smaller on larger screens */
-  }
-}
 

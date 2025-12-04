@@ -1,4 +1,4 @@
-baseURL: "https://zoey-cheng.github.io/"
+baseURL: "https://zy-cheng.github.io/"
 title: Ziyun Cheng
 
 # Uncomment when not installing with Hugo Modules
@@ -11,7 +11,7 @@ theme: eureka
 pagination:
   pagerSize: 3
 copyright: >
-  &copy; 2021 <a href="https://zoey-cheng.github.io/">Ziyun Cheng</a> All Rights Reserved
+  &copy; 2021 <a href="https://zy-cheng.github.io/">Ziyun Cheng</a> All Rights Reserved
 enableEmoji: true
 enableGitInfo: false
 summaryLength: 0
